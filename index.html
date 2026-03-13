@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KanBee</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <svg class="logo-icon" viewBox="0 0 24 24" fill="none">
+        <polygon points="12,2 20,6.5 20,17.5 12,22 4,17.5 4,6.5" fill="currentColor" opacity="0.18"/>
+        <polygon points="12,2 20,6.5 20,17.5 12,22 4,17.5 4,6.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <text x="12" y="15.5" text-anchor="middle" font-size="7" font-weight="800" fill="currentColor" font-family="system-ui">KB</text>
+      </svg>
+      <span class="logo-text">KanBee</span>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" data-view="kanban">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="12" rx="1"/><rect x="17" y="3" width="5" height="15" rx="1"/></svg>
+        Kanban Board
+      </button>
+      <button class="nav-btn" data-view="tracker">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Task Tracker
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="task-summary">
+        <div class="summary-item">
+          <span class="summary-count" id="count-todo">0</span>
+          <span class="summary-label">To Do</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-count" id="count-inprocess">0</span>
+          <span class="summary-label">In Process</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-count" id="count-done">0</span>
+          <span class="summary-label">Done</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <h1 class="view-title" id="view-title">Kanban Board</h1>
+        <span class="view-subtitle" id="view-subtitle">Drag cards between columns to update status</span>
+      </div>
+      <div class="top-bar-right">
+        <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+          <span class="theme-icon theme-icon-dark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            Light
+          </span>
+          <span class="theme-icon theme-icon-light">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+            Dark
+          </span>
+        </button>
+        <button class="btn btn-primary" id="add-task-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Task
+        </button>
+      </div>
+    </header>
+
+    <!-- Kanban View -->
+    <section class="view active" id="view-kanban">
+      <div class="kanban-board">
+        <div class="kanban-column" id="col-todo" data-status="todo">
+          <div class="column-header">
+            <div class="column-title">
+              <span class="column-dot dot-todo"></span>
+              To Do
+            </div>
+            <span class="column-count" id="badge-todo">0</span>
+          </div>
+          <div class="card-list" id="list-todo"></div>
+          <button class="add-card-btn" data-status="todo">+ Add task</button>
+        </div>
+
+        <div class="kanban-column" id="col-inprocess" data-status="inprocess">
+          <div class="column-header">
+            <div class="column-title">
+              <span class="column-dot dot-inprocess"></span>
+              In Process
+            </div>
+            <span class="column-count" id="badge-inprocess">0</span>
+          </div>
+          <div class="card-list" id="list-inprocess"></div>
+          <button class="add-card-btn" data-status="inprocess">+ Add task</button>
+        </div>
+
+        <div class="kanban-column" id="col-done" data-status="done">
+          <div class="column-header">
+            <div class="column-title">
+              <span class="column-dot dot-done"></span>
+              Done
+            </div>
+            <span class="column-count" id="badge-done">0</span>
+          </div>
+          <div class="card-list" id="list-done"></div>
+          <button class="add-card-btn" data-status="done">+ Add task</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Task Tracker View -->
+    <section class="view" id="view-tracker">
+      <div class="tracker-toolbar">
+        <input class="search-input" id="search-input" type="text" placeholder="Search tasks..." />
+        <div class="filter-group">
+          <select class="filter-select" id="filter-status">
+            <option value="">All Statuses</option>
+            <option value="todo">To Do</option>
+            <option value="inprocess">In Process</option>
+            <option value="done">Done</option>
+          </select>
+          <select class="filter-select" id="filter-priority">
+            <option value="">All Priorities</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+      </div>
+      <div class="tracker-table-wrap">
+        <table class="tracker-table">
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Status</th>
+              <th>Priority</th>
+              <th>Due Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tracker-body"></tbody>
+        </table>
+        <div class="empty-state" id="tracker-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          <p>No tasks yet. Create your first task.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">New Task</h2>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <form class="modal-form" id="task-form">
+        <input type="hidden" id="task-id" />
+        <div class="form-group">
+          <label for="task-title">Title <span class="required">*</span></label>
+          <input type="text" id="task-title" placeholder="Task title" required />
+        </div>
+        <div class="form-group">
+          <label for="task-desc">Description</label>
+          <textarea id="task-desc" rows="3" placeholder="Optional description..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <div class="seg-group" id="status-group" data-input="task-status">
+            <button type="button" class="seg-btn seg-todo" data-value="todo">
+              <span class="seg-dot"></span>To Do
+            </button>
+            <button type="button" class="seg-btn seg-inprocess" data-value="inprocess">
+              <span class="seg-dot"></span>In Process
+            </button>
+            <button type="button" class="seg-btn seg-done" data-value="done">
+              <span class="seg-dot"></span>Done
+            </button>
+          </div>
+          <input type="hidden" id="task-status" value="todo" />
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>Priority</label>
+            <div class="seg-group" id="priority-group" data-input="task-priority">
+              <button type="button" class="seg-btn seg-high" data-value="high">
+                <svg viewBox="0 0 10 10"><polygon points="5,1 9,9 1,9" fill="currentColor"/></svg>High
+              </button>
+              <button type="button" class="seg-btn seg-medium" data-value="medium">
+                <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg>Medium
+              </button>
+              <button type="button" class="seg-btn seg-low" data-value="low">
+                <svg viewBox="0 0 10 10"><polygon points="5,9 9,1 1,1" fill="currentColor"/></svg>Low
+              </button>
+            </div>
+            <input type="hidden" id="task-priority" value="medium" />
+          </div>
+          <div class="form-group">
+            <label>Due Date</label>
+            <div class="date-inputs" id="date-inputs-wrap">
+              <input class="date-part" id="task-due-day"   type="number" placeholder="DD"   min="1"    max="31"   maxlength="2" />
+              <span class="date-sep">/</span>
+              <input class="date-part" id="task-due-month" type="number" placeholder="MM"   min="1"    max="12"   maxlength="2" />
+              <span class="date-sep">/</span>
+              <input class="date-part" id="task-due-year"  type="number" placeholder="YYYY" min="2000" max="2099" maxlength="4" />
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" id="modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="modal-submit">Create Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
